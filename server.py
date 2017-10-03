@@ -37,7 +37,7 @@ class Resp(Resource):
         #with requests.get(data.url, params=data.params) as resp:
         return data
  
-api.add_resource(Resp, '/request/<string:url>')
+api.add_resource(Resp, '/request/<string:data>')
 api.add_resource(RespMeta, '/meta')
 
 if __name__ == '__main__':
