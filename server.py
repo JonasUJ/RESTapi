@@ -17,7 +17,7 @@ class Resp(Resource):
         #with requests.get(url)
         return index, url
  
-api.add_resource(Resp, '/request/<string:inp>')
+api.add_resource(Resp, '/request?<string:url>&<string:index>')
 api.add_resource(RespMeta, '/meta')
 
 if __name__ == '__main__':
