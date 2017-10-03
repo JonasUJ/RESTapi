@@ -38,7 +38,7 @@ class Resp(Resource):
         self.data = DataSplitter(data)
         print(self.data.params)
 
-        self.url = '{0.protocol}://{0.domain}.{0.tld}/{1}'.format(self.data, self.data.path.replace('-', '/'))
+        self.url = '{0.protocol}://www.{0.domain}.{0.tld}/{1}'.format(self.data, self.data.path.replace('-', '/'))
         print(self.url)
 
         with requests.get(self.url, params=self.data.params) as resp:
