@@ -31,11 +31,12 @@ class RespMeta(Resource):
 
 
 class Resp(Resource):
-    def get(self, data:DataSplitter):
-        print(data, dir(data))
-        print(data.url, data.params)
-        #with requests.get(data.url, params=data.params) as resp:
-        return data
+    def get(self, data):
+        self.data = DataSplitter(data)
+        print(self.data, dir(self.data))
+        print(self.data.url, self.data.params)
+        #with requests.get(self.data.url, params=self.data.params) as resp:
+        return self.data
  
 api.add_resource(Resp, '/request/<string:data>')
 api.add_resource(RespMeta, '/meta')
