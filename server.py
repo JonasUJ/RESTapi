@@ -52,11 +52,16 @@ class Resp(Resource):
         self.url = '{0.protocol}://www.{0.domain}.{0.tld}/{1}'.format(self.data, self.data.path.replace(',', '/'))
         print(self.url)
 
-        with requests.get(self.url, params=self.data.params) as resp:
-            extr = resp.json()
-            value = eval("extr" + self.data.index)
-            return value
-
+        try:
+            with requests.get(self.url, params=self.data.params) as resp:
+                extr = resp.json()
+                try:
+                    value = eval("extr" + self.data.index)
+                except Exception as e:
+                    return e
+                return value
+        except Exception as e:
+            return e
 
  
 api.add_resource(Resp, '/request/<string:data>')
