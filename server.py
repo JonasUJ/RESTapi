@@ -54,7 +54,7 @@ class Resp(Resource):
 
         try:
             with requests.get(self.url, params=self.data.params) as resp:
-                
+
                 try:
                     extr = resp.json()
                 except TypeError:
@@ -64,6 +64,8 @@ class Resp(Resource):
 
                 try:
                     value = eval("extr" + self.data.index)
+                except IndexError:
+                    return 'Invalid index ' + self.data.index
                 except Exception as e:
                     return str(e)
 
