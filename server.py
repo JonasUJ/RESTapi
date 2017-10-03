@@ -25,6 +25,7 @@ class DataSplitter:
                 self.params[k] = v
 
 
+
 class RespMeta(Resource):
     def get(self):
         return 'My RESTful api, this is supposed to interact with the cleverbot.com RESTful api'
@@ -36,7 +37,7 @@ class Resp(Resource):
         print(self.data, dir(self.data))
         print(self.data.url, self.data.params)
         #with requests.get(self.data.url, params=self.data.params) as resp:
-        return self.data
+        return self.data.url, self.data.params
  
 api.add_resource(Resp, '/request/<string:data>')
 api.add_resource(RespMeta, '/meta')
