@@ -54,14 +54,22 @@ class Resp(Resource):
 
         try:
             with requests.get(self.url, params=self.data.params) as resp:
-                extr = resp.json()
+                
+                try:
+                    extr = resp.json()
+                except TypeError:
+                    return 'Invalid schema'
+                except Exception as e:
+                    return str(e)
+
                 try:
                     value = eval("extr" + self.data.index)
                 except Exception as e:
-                    return e
+                    return str(e)
+
                 return value
         except Exception as e:
-            return e
+            return str(e)
 
  
 api.add_resource(Resp, '/request/<string:data>')
