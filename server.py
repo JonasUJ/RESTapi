@@ -9,7 +9,7 @@ from flask_restful import Resource, Api
 app = Flask(__name__)
 api = Api(app)
 
-argregex = re.compile(r"([^&\s]+)=([^&\s]+)")
+argregex = re.compile(r"([^&]+)=([^&]+)")
 
 class DataSplitter:
 
