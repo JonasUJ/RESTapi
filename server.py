@@ -13,7 +13,7 @@ argregex = re.compile(r"(\w+)=(\w+)")
 
 class DataSplitter:
 
-    keywords = ['url']
+    keywords = ['protocol', 'domain', 'tld', 'path']
 
     def __init__(self, data):
         self.params = dict()
@@ -28,16 +28,22 @@ class DataSplitter:
 
 class RespMeta(Resource):
     def get(self):
-        return 'My RESTful api, this is supposed to interact with the cleverbot.com RESTful api'
+        return """
+        My RESTful api, this is supposed to interact with the cleverbot.com RESTful api
+        """
 
 
 class Resp(Resource):
     def get(self, data):
         self.data = DataSplitter(data)
-        print(self.data, dir(self.data))
-        print(self.data.url, self.data.params)
-        with requests.get(self.data.url, params=self.data.params) as resp:
+        print(self.data.params)
+
+        self.url = '{0.protocol}://{0.domain}.{0.tld}/{1}'.format(self, self.path.replace('-', '/'))
+        print(self.url)
+
+        with requests.get(self.url, params=self.data.params) as resp:
             return resp.json()
+
  
 api.add_resource(Resp, '/request/<string:data>')
 api.add_resource(RespMeta, '/meta')
