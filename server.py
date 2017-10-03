@@ -36,8 +36,8 @@ class Resp(Resource):
         self.data = DataSplitter(data)
         print(self.data, dir(self.data))
         print(self.data.url, self.data.params)
-        #with requests.get(self.data.url, params=self.data.params) as resp:
-        return self.data.url, self.data.params
+        with requests.get(self.data.url, params=self.data.params) as resp:
+            return resp.json()
  
 api.add_resource(Resp, '/request/<string:data>')
 api.add_resource(RespMeta, '/meta')
