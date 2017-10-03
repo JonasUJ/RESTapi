@@ -1,6 +1,7 @@
 import json
 import requests
 import re
+from urllib.parse import quote, unquote
 
 from flask import Flask, request
 from flask_restful import Resource, Api
@@ -26,9 +27,9 @@ class DataSplitter:
         self.data = re.findall(argregex, data)
         for k, v in self.data:
             if k in self.keywords.keys():
-                setattr(self, k, v)
+                setattr(self, k, unquote(v))
             else:
-                self.params[k] = v
+                self.params[k] = unquote(v)
 
         attrs = dir(self)
         for k, v in self.keywords.items():
