@@ -1,1 +1,1 @@
-api: python request.py
+web: gunicorn request:app
