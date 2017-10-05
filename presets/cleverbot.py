@@ -5,6 +5,17 @@ from urllib.parse import quote
 
 from flask_restful import Resource
 
+global cs
+cs = ''
+
+def set_cs(conv):
+    global cs
+    cs = conv
+
+def get_cs():
+    global cs
+    return cs
+
 
 ARG_RE = re.compile(r"([^&]+)=([^&]*)")
 
@@ -12,7 +23,7 @@ ARG_RE = re.compile(r"([^&]+)=([^&]*)")
 class DataSplitter:
 
     params = {
-        'userinput': '',
+        'input': '',
         'key': '',
         'cs': '',
         'callback': ''
@@ -33,14 +44,20 @@ class Endpoint(Resource):
 
     def get(self, data):
         self.data = DataSplitter(data)
+        if not self.data.params['cs']:
+            self.data.params['cs'] = get_cs()
+        print(get_cs(), '<--')
 
         if not self.data.params['key']:
             return 'No cleverbot api key supplied'
 
         try:
+            print(self.data.params)
             with requests.get(self.url, params=self.data.params) as resp:
                 try:
-                    output = resp.json()['output']
+                    response = resp.json()
+                    output = response#['output']
+                    set_cs(response['cs'])
                 except IndexError:
                     return 'Sorry, could not get a valid respone from cleverbot :('
                 except Exception as e:
