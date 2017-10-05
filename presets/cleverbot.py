@@ -44,9 +44,9 @@ class Endpoint(Resource):
 
     def get(self, data):
         self.data = DataSplitter(data)
+
         if not self.data.params['cs']:
             self.data.params['cs'] = get_cs()
-        print(get_cs(), '<--')
 
         if not self.data.params['key']:
             return 'No cleverbot api key supplied'
@@ -56,7 +56,7 @@ class Endpoint(Resource):
             with requests.get(self.url, params=self.data.params) as resp:
                 try:
                     response = resp.json()
-                    output = response#['output']
+                    output = response['output']
                     set_cs(response['cs'])
                 except IndexError:
                     return 'Sorry, could not get a valid respone from cleverbot :('
@@ -66,4 +66,5 @@ class Endpoint(Resource):
         except Exception as e:
             return str(e)
 
+        print('In: {}\nOut: {}'.format(response['input'], response['output']))
         return output
