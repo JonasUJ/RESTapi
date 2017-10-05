@@ -1,7 +1,7 @@
 import os
 import re
 import requests
-from urllib.parse import quote
+from urllib.parse import unquote
 
 from flask_restful import Resource
 
@@ -35,7 +35,7 @@ class DataSplitter:
 
         for k, v in self.data:
             if k in self.params.keys():
-                self.params[k] = quote(v)
+                self.params[k] = unquote(v)
 
 
 class Endpoint(Resource):
@@ -52,7 +52,6 @@ class Endpoint(Resource):
             return 'No cleverbot api key supplied'
 
         try:
-            print(self.data.params)
             with requests.get(self.url, params=self.data.params) as resp:
                 try:
                     response = resp.json()
