@@ -46,12 +46,11 @@ class Endpoint(Resource):
         self.data = DataSplitter(data)
 
         inp = self.data.params['input']
-        if self.data.params['fool'] == 'true' and \
-            inp.lower().replace('?', '') in Fool.get_fool():
 
-            out = Fool.get_fool()[inp.lower()]
-            print('In: {}\nFooled out: {}'.format(inp, out))
-            return out
+        fooled_entry = Fool.get(inp)
+        if self.data.params['fool'] == 'true' and fooled_entry:
+            print('In: {}\nFooled out: {}'.format(inp, fooled_entry))
+            return fooled_entry
 
         if not self.data.params['cs']:
             self.data.params['cs'] = get_cs()
