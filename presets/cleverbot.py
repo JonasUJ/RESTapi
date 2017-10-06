@@ -42,7 +42,7 @@ class DataSplitter:
 class Endpoint(Resource):
 
     url = 'https://www.cleverbot.com/getreply'
-    out_format = '<pre>{}</pre>'
+    out_format = '<pre style="word-wrap: break-word; white-space: pre-wrap;">{}</pre>'
 
     def get(self, data):
         self.data = DataSplitter(data)
