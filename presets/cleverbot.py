@@ -3,7 +3,9 @@ import re
 import requests
 from urllib.parse import unquote
 
+from flask import Response
 from flask_restful import Resource
+from presets.cleverbotfool.fool import Fool
 
 global cs
 cs = ''
@@ -16,9 +18,7 @@ def get_cs():
     global cs
     return cs
 
-
 ARG_RE = re.compile(r"([^&]+)=([^&]*)")
-
 
 class DataSplitter:
 
@@ -26,7 +26,8 @@ class DataSplitter:
         'input': '',
         'key': '',
         'cs': '',
-        'callback': ''
+        'callback': '',
+        'fool': 'false'
     }
 
     def __init__(self, data):
@@ -41,9 +42,18 @@ class DataSplitter:
 class Endpoint(Resource):
 
     url = 'https://www.cleverbot.com/getreply'
+    out_format = '<pre>{}</pre>'
 
     def get(self, data):
         self.data = DataSplitter(data)
+
+        inp = self.data.params['input']
+        if self.data.params['fool'] == 'true' and \
+            inp.lower() in Fool.get_fool():
+
+            out = Fool.get_fool()[inp.lower()]
+            print('In: {}\nFooled out: {}'.format(inp, out))
+            return Response(self.out_format.format(out), mimetype='text/html')
 
         if not self.data.params['cs']:
             self.data.params['cs'] = get_cs()
@@ -66,4 +76,4 @@ class Endpoint(Resource):
             return str(e)
 
         print('In: {}\nOut: {}'.format(response['input'], response['output']))
-        return output
+        return Response(self.out_format.format(output), mimetype='text/html')
