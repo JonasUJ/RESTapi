@@ -47,7 +47,7 @@ class Endpoint(Resource):
 
         inp = self.data.params['input']
         if self.data.params['fool'] == 'true' and \
-            inp.lower() in Fool.get_fool():
+            inp.lower().replace('?', '') in Fool.get_fool():
 
             out = Fool.get_fool()[inp.lower()]
             print('In: {}\nFooled out: {}'.format(inp, out))
