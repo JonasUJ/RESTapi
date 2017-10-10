@@ -14,7 +14,7 @@ class Fool:
         'what playlist is this': 'http://lofi.collegemusic.co.uk/',
         'which playlist is this': 'http://lofi.collegemusic.co.uk/',
         'nourish or college music': 'College Music obviously!',
-        'who’s better nourish or college music': 'College Music obviously!',
+        'whos better nourish or college music': 'College Music obviously!',
         'thoughts on ambition': 'new phone who dis?'
     }
 
