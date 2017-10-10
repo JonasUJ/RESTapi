@@ -59,7 +59,12 @@ class Endpoint(Resource):
             return 'No cleverbot api key supplied'
 
         try:
-            with requests.get(self.url, params=self.data.params) as resp:
+            with requests.get(
+                    self.url,
+                    params=self.data.params,
+                    timeout=8.0
+                ) as resp:
+
                 try:
                     response = resp.json()
                     output = response['output']
@@ -69,6 +74,8 @@ class Endpoint(Resource):
                 except Exception as e:
                     return str(e)
 
+        except requests.exceptions.Timeout as e:
+            return 'Couldn\'t connect to Cleverbot in time *sadface*'
         except Exception as e:
             return str(e)
 

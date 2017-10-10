@@ -19,7 +19,7 @@ class DataSplitter:
     tld = 'com'
     path = ''
     index = ''
-    preset = ''
+    timeout = '8.0'
 
     def __init__(self, data):
 
@@ -34,6 +34,10 @@ class DataSplitter:
                 self.params[k] = unquote(v)
 
         self.path = self.path.replace(',', '/')
+        try:
+            self.data.timeout = float(self.data.timeout)
+        except (ValueError, TypeError):
+            self.data.timeout = 8.0
 
 
 class Meta(Resource):
@@ -49,7 +53,11 @@ class Resp(Resource):
         self.url = '{0.protocol}://www.{0.domain}.{0.tld}/{0.path}'.format(self.data)
 
         try:
-            with requests.get(self.url, params=self.data.params) as resp:
+            with requests.get(
+                    self.url,
+                    params=self.data.params,
+                    timeout=self.data.timeout
+                ) as resp:
 
                 try:
                     extr = resp.json()
@@ -58,6 +66,8 @@ class Resp(Resource):
                 except Exception as e:
                     return str(e)
 
+        except requests.exceptions.Timeout:
+            return 'Connection timed out'
         except Exception as e:
             return str(e)
 
