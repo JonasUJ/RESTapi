@@ -65,17 +65,20 @@ class Endpoint(Resource):
                     timeout=8.0
                 ) as resp:
 
+                response = resp.json()
+                if response['status'] == '505':
+                    return "I'm currently out of gas, but expecting a top up soon!"
+
                 try:
-                    response = resp.json()
                     output = response['output']
                     set_cs(response['cs'])
                 except IndexError:
-                    return 'Sorry, could not get a valid respone from cleverbot :('
+                    return "Uh oh, looks like I didn't understand that"
                 except Exception as e:
                     return str(e)
 
         except requests.exceptions.Timeout as e:
-            return 'Couldn\'t connect to Cleverbot in time *sadface*'
+            return "Looks like something is broken, oops, expect me to be functional soon!"
         except Exception as e:
             return str(e)
 
