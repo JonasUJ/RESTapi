@@ -66,7 +66,7 @@ class Endpoint(Resource):
                 ) as resp:
 
                 response = resp.json()
-                if response['status'] == '505':
+                if response.get('status', None) == '505':
                     return "I'm currently out of gas, but expecting a top up soon!"
 
                 try:
@@ -80,7 +80,7 @@ class Endpoint(Resource):
         except requests.exceptions.Timeout as e:
             return "Looks like something is broken, oops, expect me to be functional soon!"
         except Exception as e:
-            return str(e)
+            return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
 
         print('In: {}\nOut: {}'.format(response['input'], response['output']))
         return output
