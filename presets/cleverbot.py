@@ -66,6 +66,8 @@ class Endpoint(Resource):
                 ) as resp:
 
                 response = resp.json()
+                print('Status:', response.get('status', 'n/a'))
+
                 if response.get('status', None) == '505':
                     return "I'm currently out of gas, but expecting a top up soon!"
 
