@@ -86,3 +86,7 @@ class Endpoint(Resource):
 
         print('In: {}\nOut: {}'.format(response['input'], response['output']))
         return output
+
+
+def setup(api, app, name, objects=None):
+    api.add_resource(Endpoint, '/{}/<string:data>'.format(name))

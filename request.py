@@ -42,9 +42,7 @@ class DataSplitter:
 
 class Meta(Resource):
     def get(self):
-        return """
-        My RESTful api, this is supposed to interact with the cleverbot.com RESTful api
-        """
+        return "My RESTful api, this is supposed to interact with the cleverbot.com RESTful api"
 
 
 class Resp(Resource):
@@ -83,6 +81,12 @@ class Resp(Resource):
         return value
 
 
+class Objects:
+    """Don't mind this"""
+    pass
+
+objs = Objects()
+
 app = Flask(__name__)
 api = Api(app)
 
@@ -93,7 +97,7 @@ PRESETS = [os.path.splitext(pre)[0] for pre in os.listdir('presets') if os.path.
 
 for pre in PRESETS:
     module = import_module('presets.{}'.format(pre))
-    api.add_resource(module.Endpoint, '/{}/<string:data>'.format(pre))
+    module.setup(api, app, pre, objects=objs)
 
 if __name__ == '__main__':
      app.run()

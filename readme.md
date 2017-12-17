@@ -54,6 +54,8 @@ Everything else is passed as parameters to the specified API, in this case
 
 ## Presets
 
+**This has changed, now all a preset requires is a `setup(api, app, name, objects)` function.**
+
 Presets help by making the request less painful, and can also do stuff depending
 on the response from the API, instead of just returning it.
 
