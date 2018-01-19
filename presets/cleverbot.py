@@ -69,12 +69,12 @@ class BotHandler:
 
 def setup(api, app, name, objects):
 
-    if not hasattr(objects, 'BotHandler'):
-        setattr(objects, 'BotHandler', BotHandler())
+    if not hasattr(objects, f'BotHandler_{name}'):
+        setattr(objects, f'BotHandler_{name}', BotHandler())
 
     @app.route(f'/{name}')
     def cleverbot_endpoint():
-        clevbot = objects.BotHandler.get_bot(key=request.args['key'], user=request.args.get('user', 'default'))
+        clevbot = getattr(objects, f'BotHandler_{name}').get_bot(key=request.args['key'], user=request.args.get('user', 'default'))
         print(f'Responding with: {str(clevbot)}')
         text = clevbot.query(request.args['input'])
 
