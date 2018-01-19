@@ -7,7 +7,7 @@ from presets.cleverbotfool.fool import Fool
 
 class CleverBot:
 
-    def __init__(self, user, key, cs=''):
+    def __init__(self, user, key, cs='MXYxCTh2MQlBdldYQ1BBVkxGT1cJMUZ2MTUxNjM5OTM2Mgk2NGlJIGJvcmVkLgk='):
         self.user = user
         self.key = key
         self.url = 'https://www.cleverbot.com/getreply'
@@ -27,10 +27,13 @@ class CleverBot:
             return fooled_entry
 
         self.params['input'] = text
+        print(self.params)
 
         try:
             with requests.get(self.url, params=self.params, timeout=8.0) as resp:
+                print(resp.text)
                 respdict = resp.json()
+                print(respdict)
 
                 if respdict.get('status') == '505':
                     return "I'm currently out of gas, but expecting a top up soon!"
@@ -43,7 +46,7 @@ class CleverBot:
                     return False
         
         except requests.exceptions.Timeout:
-            return "Looks like something is broken, oops, expect me to be functional soon!"
+            return "Looks like something is broken, oops, expect me to be functional soon! (Maybe this is a single time thing, just try again)"
         except Exception as e:
             print(e)
             return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
