@@ -40,7 +40,7 @@ class CleverBot:
                 elif respdict.get('status', 'success') == 'success':
                     self.params['cs'] = respdict['cs']
                     print('In: {}\nOut: {}'.format(respdict['input'], respdict['output']))
-                    return respdict['output']
+                    return '{}{}'.format(f'@{self.user} ' if self.user != 'default' else '', respdict['output'])
                 else:
                     print('Non-success status:', respdict['status'])
                     return False
