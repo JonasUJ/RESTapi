@@ -48,6 +48,9 @@ class CleverBot:
             print(e)
             return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
 
+        def __repr__(self):
+            return f'{self.__class__.__name__}(user={self.user})'
+
 
 class BotHandler:
     
@@ -72,6 +75,7 @@ def setup(api, app, name, objects):
     @app.route(f'/{name}')
     def cleverbot_endpoint():
         clevbot = objects.BotHandler.get_bot(key=request.args['key'], user=request.args.get('user', 'default'))
+        print(f'Responding with: {clevbot}')
         text = clevbot.query(request.args['input'])
 
         resp = Response(text, status=200, mimetype='text/plain')
