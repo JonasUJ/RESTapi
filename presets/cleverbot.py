@@ -27,13 +27,10 @@ class CleverBot:
             return fooled_entry
 
         self.params['input'] = text
-        print(self.params)
 
         try:
             with requests.get(self.url, params=self.params, timeout=8.0) as resp:
-                print(resp.text)
                 respdict = resp.json()
-                print(respdict)
 
                 if respdict.get('status') == '505':
                     return "I'm currently out of gas, but expecting a top up soon!"
