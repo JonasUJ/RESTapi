@@ -48,8 +48,8 @@ class CleverBot:
             print(e)
             return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
 
-        def __repr__(self):
-            return f'{self.__class__.__name__}(user={self.user})'
+    def __repr__(self):
+        return f'{self.__class__.__name__}(user={self.user})'
 
 
 class BotHandler:
