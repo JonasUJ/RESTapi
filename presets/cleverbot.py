@@ -75,7 +75,7 @@ def setup(api, app, name, objects):
     @app.route(f'/{name}')
     def cleverbot_endpoint():
         clevbot = objects.BotHandler.get_bot(key=request.args['key'], user=request.args.get('user', 'default'))
-        print(f'Responding with: {clevbot}')
+        print(f'Responding with: {str(clevbot)}')
         text = clevbot.query(request.args['input'])
 
         resp = Response(text, status=200, mimetype='text/plain')
