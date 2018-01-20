@@ -33,7 +33,16 @@ class CleverBot:
                 respdict = resp.json()
 
                 if respdict.get('status') == '505':
-                    return "I'm currently out of gas, but expecting a top up soon!"
+                    print('Trying fallback key')
+                    tempparams = self.params.copy()
+                    tempparams['key'] = 'CC6gmSNHG3BXtVkgty8xFPoZkkg' # I dont care about this key, that's why i am not hiding it
+                    with requests.get(self.url, params=tempparams, timeout=8.0) as resp:
+                        respdict = resp.json()
+                    if respdict.get('status') == '505':
+                        return "I'm currently out of gas, but expecting a top up soon!"
+                
+                if respdict.get('status') == '401':
+                    return 'Invalid key'
                 elif respdict.get('status', 'success') == 'success':
                     self.params['cs'] = respdict['cs']
                     print('In: {}\nOut: {}'.format(respdict['input'], respdict['output']))
