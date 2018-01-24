@@ -19,7 +19,7 @@ class CleverBot:
             'input': ''
         }
 
-    def query(self, text, fool=False):
+    def query(self, text, fool=True):
 
         fooled_entry = Fool.get(text)
         if fool and fooled_entry:
@@ -29,33 +29,33 @@ class CleverBot:
         self.params['input'] = text
 
         try:
-            with requests.get(self.url, params=self.params, timeout=8.0) as resp:
-                respdict = resp.json()
-
-                if respdict.get('status') == '505':
-                    print('Trying fallback key')
-                    tempparams = self.params.copy()
-                    tempparams['key'] = 'CC6gmSNHG3BXtVkgty8xFPoZkkg' # I dont care about this key, that's why i am not hiding it
-                    with requests.get(self.url, params=tempparams, timeout=8.0) as resp:
-                        respdict = resp.json()
-                    if respdict.get('status') == '505':
-                        return "I'm currently out of gas, but expecting a top up soon!"
-                
-                if respdict.get('status') == '401':
-                    return 'Invalid key'
-                elif respdict.get('status', 'success') == 'success':
-                    self.params['cs'] = respdict['cs']
-                    print('In: {}\nOut: {}'.format(respdict['input'], respdict['output']))
-                    return '{}{}'.format(f'@{self.user} ' if self.user != 'default' else '', respdict['output'])
-                else:
-                    print('Non-success status:', respdict['status'])
-                    return False
-        
+            resp = requests.get(self.url, params=self.params, timeout=8.0)
+            respdict = resp.json()
         except requests.exceptions.Timeout:
             return "Looks like something is broken, oops, expect me to be functional soon! (Maybe this is a single time thing, just try again)"
         except Exception as e:
             print(e)
             return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
+
+        if respdict.get('status') == '505':
+            return "I'm currently out of gas, but expecting a top up soon!"
+        elif respdict.get('status') == '401':
+            return 'Invalid key'
+        elif respdict.get('status') == '413' or respdict.get('status') == '414':
+            return "Sorry, but i don't understand that long queries."
+        elif respdict.get('status') == '502' or respdict.get('status') == '504':
+            return 'Something is broken, and we are unable to fix it at this moment'
+        elif respdict.get('status') == '503':
+            return self.query(text)
+
+        elif respdict.get('status', 'success') == 'success':
+            self.params['cs'] = respdict['cs']
+            print('In: {}\nOut: {}'.format(respdict['input'], respdict['output']))
+            return '{}{}'.format(f'@{self.user} ' if self.user != 'default' else '', respdict['output'])
+        else:
+            print('Non-success status:', respdict['status'])
+            return False
+        
 
     def __repr__(self):
         return f'{self.__class__.__name__}(user={self.user})'
