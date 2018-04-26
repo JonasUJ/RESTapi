@@ -38,7 +38,7 @@ class CleverBot:
             return 'Error, please contact us preferably with a screencap of your\'s and this message. [{}: {}]'.format(type(e), e)
 
         if respdict.get('status') == '505':
-            return "I'm currently out of gas, but expecting a top up soon!"
+            return "I'm currently out of gas, to get me back up sooner, you can top me up here: https://goo.gl/ySwmf7"
         elif respdict.get('status') == '401':
             return 'Invalid key'
         elif respdict.get('status') == '413' or respdict.get('status') == '414':
