@@ -31,13 +31,12 @@ class CleverBot:
         try:
             resp = requests.get(self.url, params=self.params, timeout=8.0)
             try:
-                respdict = resp.json()
+                respdict = resp.json(strict=False)
             except (JSONDecodeError, ValueError) as e:
                 with open("presets/cleverbot/log.txt", "a") as fp:
                     fp.write(
                         f"\nUser: {self.user}\n" 
                         f"Error: {e}\n" 
-                        f"Url: {self.url}\n" 
                         f"Plain text:\n{resp.text}\n" + '-' * 100
                     )
                 return "We've seen weird behaviour where some people cannot use !talk, seems you are one of them. This incident has been logged internally and we'll look into it."
