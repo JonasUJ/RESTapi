@@ -1,5 +1,5 @@
 import requests
-import json
+from json import JSONDecodeError
 from flask import Response, request
 
 from presets.cleverbotfool.fool import Fool
@@ -30,7 +30,17 @@ class CleverBot:
 
         try:
             resp = requests.get(self.url, params=self.params, timeout=8.0)
-            respdict = resp.json()
+            try:
+                respdict = resp.json()
+            except (JSONDecodeError, ValueError) as e:
+                with open("presets/cleverbot/log.txt", "a") as fp:
+                    fp.write(
+                        f"\nUser: {self.user}\n" 
+                        f"Error: {e}\n" 
+                        f"Url: {self.url}\n" 
+                        f"Plain text:\n{resp.text}\n" + '-' * 100
+                    )
+                return "We've seen weird behaviour where some people cannot use !talk, seems you are one of them. This incident has been logged internally and we'll look into it."
         except requests.exceptions.Timeout:
             return "Looks like something is broken, oops, expect me to be functional soon! (Maybe this is a single time thing, just try again)"
         except Exception as e:
